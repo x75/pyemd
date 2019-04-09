@@ -63,7 +63,7 @@ static PyObject *_emd(PyObject *self, PyObject *args) {
     return retval;
 }
 
-static PyMethodDef c_emd_methods[] = {
+static PyMethodDef module_methods[] = {
    { "_emd", (PyCFunction)_emd, METH_VARARGS,
     "Computes the EMD between two sets of weighted examples, cost matrix.\n"
     "@param weight_x     : NumPy array of weights for first sample of size n\n"
@@ -77,9 +77,16 @@ static PyMethodDef c_emd_methods[] = {
    { NULL, NULL, 0, NULL }
 };
 
-void initc_emd(void)
+static struct PyModuleDef c_emd = {
+  PyModuleDef_HEAD_INIT,
+  "c_emd", /* name of module */
+  "usage: c_emd()\n", /* module documentation, may be NULL */
+  -1,   /* size of per-interpreter state of the module, or -1 if the module keeps state in global variables. */
+  module_methods
+};
+
+
+PyMODINIT_FUNC PyInit_c_emd(void)
 {
-    Py_InitModule3("c_emd", c_emd_methods,
-                   "Earth Mover's Distance");
-    import_array();
+  return PyModule_Create(&c_emd);
 }
